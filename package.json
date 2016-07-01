@@ -5,8 +5,6 @@
   "main": "dist/index.js",
   "scripts": {
     "prepublish": "npm run build",
-    // "test2": "gulp test",
-    // "build2": "babel lib -d dist",
     "start": "nodemon lib/index.js --exec babel-node --presets es2015,stage-2",
     "build": "babel lib -d dist",
     "serve": "node dist/index.js",
