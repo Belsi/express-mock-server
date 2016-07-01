@@ -1,0 +1,4 @@
+### Project specific
+
+npm-debug.*
+node_modules/

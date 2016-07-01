@@ -1,0 +1,28 @@
+{
+  "name": "express-mock-server",
+  "version": "1.0.0",
+  "description": "Mock server powered by Express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Belsi/express-mock-server.git"
+  },
+  "keywords": [
+    "mock",
+    "server",
+    "express",
+    "netty"
+  ],
+  "author": "Frantisek Belsan <frantisek.belsan@gmail.com> (https://github.com/Belsi)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Belsi/express-mock-server/issues"
+  },
+  "homepage": "https://github.com/Belsi/express-mock-server#readme",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  }
+}
