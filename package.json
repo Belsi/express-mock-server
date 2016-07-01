@@ -23,6 +23,14 @@
   },
   "homepage": "https://github.com/Belsi/express-mock-server#readme",
   "dependencies": {
-    "gulp": "^3.9.1"
+    "babel-polyfill": "^6.9.1",
+    "babel-register": "^6.9.0",
+    "body-parser": "^1.15.2",
+    "colors": "^1.1.2",
+    "express": "^4.14.0",
+    "gulp": "^3.9.1",
+    "http-status-codes": "^1.0.6",
+    "morgan": "^1.7.0",
+    "nconf": "^0.8.4"
   }
 }
