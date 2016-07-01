@@ -1,7 +1,9 @@
 
 var gulp = require('gulp');
 
+var server = require('./index.js');
+
 gulp.task('test', function (cb) {
- console.log('zapinam testy *******');
- cb();
+  server.runServer([]);
+  cb();
 });
