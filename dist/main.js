@@ -364,6 +364,7 @@ var Server = function () {
           case _constants.methods.GET:
           case _constants.methods.PUT:
           case _constants.methods.DELETE:
+          case _constants.methods.PATCH:
           default:
             {
               matchedRecord = this.matchRecordGet(req, bundle);
@@ -439,6 +440,14 @@ var Server = function () {
           deletes.forEach(function (record) {
             _this2.app.delete(path, _this2.cb.bind(_this2));
             _this2.logRegistredPath(isLogEnabled, _constants.methods.DELETE, path);
+          });
+        }
+
+        var patches = pathItem[_constants.methods.PATCH];
+        if (patches) {
+          patches.forEach(function (record) {
+            _this2.app.patch(path, _this2.cb.bind(_this2));
+            _this2.logRegistredPath(isLogEnabled, _constants.methods.PATCH, path);
           });
         }
       });
