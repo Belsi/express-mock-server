@@ -170,6 +170,10 @@ var Handler = function () {
         if (deletes) {
           deletes.sort(compare);
         }
+        var patches = pathItem[_constants.methods.PATCH];
+        if (patches) {
+          patches.sort(compare);
+        }
       });
     }
   }]);
