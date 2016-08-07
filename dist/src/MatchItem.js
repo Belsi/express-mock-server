@@ -9,7 +9,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  *
  */
-
 var MatchItem = function MatchItem(record, result) {
   _classCallCheck(this, MatchItem);
 

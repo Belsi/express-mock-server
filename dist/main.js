@@ -63,10 +63,10 @@ var Server = function () {
   /**
    *
    */
-
   function Server(sources, serverConfig) {
     _classCallCheck(this, Server);
 
+    this.serverInstance = null;
     this.app = (0, _express2.default)();
     this.serverConfig = serverConfig;
 
@@ -472,6 +472,16 @@ var Server = function () {
     }
 
     /**
+     *
+     */
+
+  }, {
+    key: 'close',
+    value: function close() {
+      this.serverInstance.close();
+    }
+
+    /**
      *  Method to log registred path
      */
 
@@ -506,7 +516,7 @@ var Server = function () {
   }, {
     key: 'serverStart',
     value: function serverStart(app, port) {
-      this.app.listen(port, function () {
+      this.serverInstance = app.listen(port, function () {
         console.log(('* Server port    ' + port).yellow);
         console.log('*************************'.yellow);
         console.log(_colors2.default.bgGreen.white('Server START'));
