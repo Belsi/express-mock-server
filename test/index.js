@@ -1,5 +1,6 @@
 import assert from 'assert';
 import http from 'http';
+import request from 'request';
 import { runServer } from '../lib/index.js';
 import sources from './sources';
 import urls from './urls';
@@ -7,7 +8,9 @@ import responseKey, { responseKeyParam } from './responsekey';
 import Digger from './Digger';
 
 const PORT = 1337;
-const SERVER_URL = 'http://127.0.0.1:'+PORT;
+const SERVER_NAME = '127.0.0.1';
+const SERVER_URL_WITHOUT_PORT = 'http://'+SERVER_NAME;
+const SERVER_URL = SERVER_URL_WITHOUT_PORT + ':' + PORT;
 
 function createItemsExpectation(qs, key, done){
   http.get(SERVER_URL + urls.items + qs, res => {
@@ -26,6 +29,8 @@ function createItemExpectation(id, key, done){
     });
   });
 }
+
+
 
 function createCodeExpectation(url, code, done){
   http.get(SERVER_URL + url, res => {
@@ -113,6 +118,44 @@ describe('server', () => {
 
 
   });
+
+  describe('dynamic response', () => {
+
+    it('query should be in response', (done) => {
+      createDynamicResponseExpectation(responseKey.dynamicResponse, done);
+    });
+
+  });
+
+function createDynamicResponseExpectation(key, done){
+
+  const urlParamValue = 'urlParamValue';
+
+  const postKey = "bodyParam1";
+  const postValue = "bodyValue1";
+  let postData = {};
+  postData[postKey] = postValue;
+
+  const qsKey = 'q1';
+  const qsValue = 'lolek1';
+  var qs = '?'+qsKey+'='+qsValue
+
+  var options = {
+    method: 'post',
+    body: postData, // Javascript object
+    json: true, // Use,If you are sending JSON data
+    url: SERVER_URL + urls.dynamicResponseBase + urlParamValue + qs,
+  };
+
+  request(options, (err, res, body) => {
+    assert.equal(key, body[responseKeyParam]);
+    assert.equal(urlParamValue, body.requestParams.urlParams[urls.dynamicResponseKey]);
+    assert.equal(qsValue, body.requestParams.qsParams[qsKey]);
+    assert.equal(postValue, body.requestParams.bodyParams[postKey]);
+    done();
+  });
+}
+
 
 });
 

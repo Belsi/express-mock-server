@@ -187,6 +187,8 @@ var Server = function () {
 
       var matches = [];
       bundle.forEach(function (record) {
+        // console.log(req.query);
+        // console.log(record.queryStringParameters);
         var result = _this.getMatchingResultByQueryStrings(req.query, record.queryStringParameters);
         // console.log('result');
         // console.log(result);
@@ -382,9 +384,15 @@ var Server = function () {
           console.log(req.query);
           console.log('BODY'.yellow);
           console.log(req.body);
+          console.log('bundle'.yellow);
+          myLog(bundle);
           res.status(_httpStatusCodes2.default.NOT_FOUND).send('NOT FOUND - no reaponse but why? Look to console.').end();
           return;
         }
+      }
+
+      if (isFunction(response)) {
+        response = response(req.params, req.query, req.body);
       }
 
       if (!!response.headers) {
@@ -557,4 +565,9 @@ function runServer(sources) {
   var server = new Server(sources, serverConfig);
   server.start();
   return server;
+}
+
+function isFunction(functionToCheck) {
+  var getType = {};
+  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }

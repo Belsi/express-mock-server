@@ -6,7 +6,9 @@ const responseKey = {
   qsOptionalQ1filled: 'qsOptionalQ1filled',
 
   urlParamBase: 'urlParamBase',
-  urlParamHardId: 'urlParamHardId'
+  urlParamHardId: 'urlParamHardId',
+
+  dynamicResponse: 'dynamicResponse'
 };
 
 export default responseKey;

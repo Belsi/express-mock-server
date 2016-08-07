@@ -11,6 +11,10 @@ const q1filledQs = [
   {'name': 'q1', 'values': ['1']}
 ];
 
+const dynamicResponseQs = [
+  {'name': 'q1', 'values': ['.*']}
+];
+
 const sources = [
   [
     // codes
@@ -25,12 +29,48 @@ const sources = [
     createSource('GET', urls.item, 200, responseKey.urlParamBase),
     // createSource('GET', urls.itemHardId, 200, responseKey.urlParamHardId),
 
+    // dynamic response
 
-
+    createDynamicSource('POST', urls.dynamicResponse, 200, responseKey.dynamicResponse, dynamicResponseQs),
   ]
 ];
 
 export default sources;
+
+/**
+ *
+ */
+function createDynamicSource(method, path, statusCode, key, queryStringParameters = null){
+
+  let body = {}
+  body[responseKeyParam] = key;
+
+  return {
+    request: {
+      'method': method,
+      'path': path,
+      'queryStringParameters': queryStringParameters,
+      'body': {
+        'type': 'JSON',
+        'value': JSON.stringify({
+          'bodyParam1': 'bodyValue1'
+        }),
+        'matchType': 'ONLY_MATCHING_FIELDS'
+      }
+    },
+    response: function(urlParams, qsParams, bodyParams) {
+      body['requestParams'] = {
+        qsParams,
+        bodyParams,
+        urlParams
+      }
+      return {
+        'statusCode': statusCode,
+        'body': JSON.stringify(body)
+      }
+    }
+  };
+}
 
 
 /**
