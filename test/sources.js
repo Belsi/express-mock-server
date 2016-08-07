@@ -1,7 +1,46 @@
 import urls from './urls';
 import responseKey, { responseKeyParam } from './responsekey';
 
-function createSource(method, path, statusCode, body = {}, queryStringParameters = null){
+const q1q2q3FilledQs = [
+  {'name': 'q1', 'values': ['.*']},
+  {'name': 'q2', 'values': ['.*']},
+  {'name': 'q3', 'values': ['.*']}
+];
+
+const q1filledQs = [
+  {'name': 'q1', 'values': ['1']}
+];
+
+const sources = [
+  [
+    // codes
+    createSource('GET', urls.base, 200),
+    createSource('GET', urls.error, 500),
+    createSource('GET', urls.notFound, 404),
+    // query strings
+    createSource('GET', urls.items, 200, responseKey.qsOptionalEmpty),
+    createSource('GET', urls.items, 200, responseKey.qsOptionalQ1Q2Q3Filed, q1q2q3FilledQs),
+    createSource('GET', urls.items, 200, responseKey.qsOptionalQ1filled, q1filledQs),
+    // item
+    createSource('GET', urls.item, 200, responseKey.urlParamBase),
+    // createSource('GET', urls.itemHardId, 200, responseKey.urlParamHardId),
+
+
+
+  ]
+];
+
+export default sources;
+
+
+/**
+ *
+ */
+function createSource(method, path, statusCode, key, queryStringParameters = null){
+
+  let body = {}
+  body[responseKeyParam] = key;
+
   return {
     request: {
       'method': method,
@@ -14,45 +53,3 @@ function createSource(method, path, statusCode, body = {}, queryStringParameters
     }
   };
 }
-
-const qsOptionalQs = [
-  {'name': 'q1', 'values': ['.*']},
-  {'name': 'q2', 'values': ['.*']},
-  {'name': 'q3', 'values': ['.*']}
-];
-let qsOptionalQ1Q2Q3Filed = {}
-qsOptionalQ1Q2Q3Filed[responseKeyParam] = responseKey.qsOptionalQ1Q2Q3Filed;
-
-
-
-let qsOptionalEmpty = {}
-qsOptionalEmpty[responseKeyParam] = responseKey.qsOptionalEmpty;
-
-
-
-const q1filledQs = [
-  {'name': 'q1', 'values': ['1']}
-];
-let q1filled = {}
-q1filled[responseKeyParam] = responseKey.qsOptionalQ1filled;
-
-
-
-const baseBody = {
-  "data": 21
-};
-
-const sources = [
-  [
-    // codes
-    createSource('GET', urls.base, 200, baseBody),
-    createSource('GET', urls.error, 500),
-    createSource('GET', urls.notFound, 404),
-    // query strings
-    createSource('GET', urls.items, 200, qsOptionalEmpty),
-    createSource('GET', urls.items, 200, qsOptionalQ1Q2Q3Filed, qsOptionalQs),
-    createSource('GET', urls.items, 200, q1filled, q1filledQs),
-  ]
-];
-
-export default sources;

@@ -18,6 +18,15 @@ function createItemsExpectation(qs, key, done){
   });
 }
 
+function createItemExpectation(id, key, done){
+  http.get(SERVER_URL + urls.item + id, res => {
+    new Digger(res, (data) => {
+      assert.equal(key, data[responseKeyParam]);
+      done();
+    });
+  });
+}
+
 function createCodeExpectation(url, code, done){
   http.get(SERVER_URL + url, res => {
     assert.equal(code, res.statusCode);
@@ -52,14 +61,14 @@ describe('server', () => {
       createCodeExpectation(urls.notFound, 404, done);
     });
 
-    it('data should be 21', (done) => {
-      http.get(SERVER_URL, res => {
-        new Digger(res, (data) => {
-          assert.equal(21, data.data);
-          done();
-        });
-      });
-    });
+    // it('data should be 21', (done) => {
+    //   http.get(SERVER_URL, res => {
+    //     new Digger(res, (data) => {
+    //       assert.equal(21, data.data);
+    //       done();
+    //     });
+    //   });
+    // });
 
   });
 
@@ -89,6 +98,19 @@ describe('server', () => {
       const qs = '?q1=1&q2=2';
       createItemsExpectation(qs, responseKey.qsOptionalQ1filled, done);
     });
+
+  });
+
+  describe('url params', () => {
+
+    it('item id lolek1 = expected urlParamBase', (done) => {
+      createItemExpectation('lolek1', responseKey.urlParamBase, done);
+    });
+
+    // it('item id hardId = expected urlParamHardId', (done) => {
+    //   createItemExpectation('hardId', responseKey.urlParamHardId, done);
+    // });
+
 
   });
 
