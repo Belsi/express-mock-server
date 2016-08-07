@@ -1,7 +1,7 @@
 import assert from 'assert';
 import http from 'http';
-let Server = require('../lib/index.js');
-// import { runServer } from '../lib/index.js';
+import { runServer } from '../lib/index.js';
+
 
 const sources = [
   {
@@ -20,19 +20,20 @@ const sources = [
   }
 ];
 
-describe('server', function () {
+describe('server', () => {
 
   var serverInstance = null;
 
-  before(function () {
-    serverInstance = Server.runServer([sources], { port: 1337 });
+  before(() => {
+    serverInstance = runServer([sources], { port: 1337 });
   });
 
-  after(function () {
+  after(() => {
     serverInstance.close();
   });
 
-  describe('Working', () => {
+  describe('Basic working', () => {
+
     it('should return 200', done => {
       http.get('http://127.0.0.1:1337', res => {
         assert.equal(200, res.statusCode);
@@ -40,15 +41,15 @@ describe('server', function () {
       });
     });
 
-    it('data should be 21', function (done) {
+    it('data should be 21', (done) => {
       http.get('http://127.0.0.1:1337', res => {
         var data = '';
 
-        res.on('data', function (chunk) {
+        res.on('data', (chunk) => {
           data += chunk;
         });
 
-        res.on('end', function () {
+        res.on('end', () => {
           let jsonData = JSON.parse(data);
           assert.equal(21, jsonData.data);
           done();
@@ -57,7 +58,6 @@ describe('server', function () {
     });
 
   });
-
 
 });
 
