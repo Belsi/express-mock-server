@@ -4,16 +4,13 @@ var gulp = require('gulp');
 var server = require('./dist/index.js');
 var shell = require('gulp-shell');
 var runSequence = require('run-sequence');
+import testSources from './test/sources';
 
-// gulp.task('test', function (cb) {
-//   var serverInstance = server.runServer([], { port: 2121 });
-//   serverInstance.close();
-//   cb();
-// });
-
-// gulp.task('default', shell.task([
-//   './node_modules/.bin/mocha --compilers js:babel/register'
-// ]));
+gulp.task('testserver', function (cb) {
+  var serverInstance = server.runServer(testSources, { port: 2121 });
+  //serverInstance.close();
+  cb();
+});
 
 // gulp.task('publish', function (cb) {
 //   runSequence(

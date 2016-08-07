@@ -1,57 +1,61 @@
 import assert from 'assert';
 import http from 'http';
 import { runServer } from '../lib/index.js';
+import sources from './sources';
+import urls from './urls';
+import responseKey, { responseKeyParam } from './responsekey';
+import Digger from './Digger';
 
+const PORT = 1337;
+const SERVER_URL = 'http://127.0.0.1:'+PORT;
 
-const sources = [
-  {
-    request: {
-      'method': 'GET',
-      'path': '/'
-    },
-    response: {
-      'statusCode': 200,
-      'body': JSON.stringify(
-        {
-          "data": 21
-        }
-      )
-    }
-  }
-];
+function createItemsExpectation(qs, key, done){
+  http.get(SERVER_URL + urls.items + qs, res => {
+    new Digger(res, (data) => {
+      assert.equal(key, data[responseKeyParam]);
+      done();
+    });
+  });
+}
+
+function createCodeExpectation(url, code, done){
+  http.get(SERVER_URL + url, res => {
+    assert.equal(code, res.statusCode);
+    done();
+  });
+}
 
 describe('server', () => {
 
   var serverInstance = null;
 
   before(() => {
-    serverInstance = runServer([sources], { port: 1337 });
+    serverInstance = runServer(sources, { port: PORT });
   });
 
   after(() => {
     serverInstance.close();
   });
 
+
   describe('Basic working', () => {
 
     it('should return 200', done => {
-      http.get('http://127.0.0.1:1337', res => {
-        assert.equal(200, res.statusCode);
-        done();
-      });
+      createCodeExpectation('', 200, done);
+    });
+
+    it('should return 500', done => {
+      createCodeExpectation(urls.error, 500, done);
+    });
+
+    it('should return 404', done => {
+      createCodeExpectation(urls.notFound, 404, done);
     });
 
     it('data should be 21', (done) => {
-      http.get('http://127.0.0.1:1337', res => {
-        var data = '';
-
-        res.on('data', (chunk) => {
-          data += chunk;
-        });
-
-        res.on('end', () => {
-          let jsonData = JSON.parse(data);
-          assert.equal(21, jsonData.data);
+      http.get(SERVER_URL, res => {
+        new Digger(res, (data) => {
+          assert.equal(21, data.data);
           done();
         });
       });
@@ -59,17 +63,34 @@ describe('server', () => {
 
   });
 
+
+  describe('Query strings', () => {
+
+    it('no query = expected empty', (done) => {
+      createItemsExpectation('', responseKey.qsOptionalEmpty, done);
+    });
+
+    it('only q1 filled = expected q1', (done) => {
+      const qs = '?q1=1';
+      createItemsExpectation(qs, responseKey.qsOptionalQ1filled, done);
+    });
+
+    it('only q1 wrong filled = expected empty', (done) => {
+      const qs = '?q1=2';
+      createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
+    });
+
+    it('q1, q2, q3 filled  = expected q1, q2, q3', (done) => {
+      const qs = '?q1=1&q2=2&q3=3';
+      createItemsExpectation(qs, responseKey.qsOptionalQ1Q2Q3Filed, done);
+    });
+
+    it('q1, q2 filled  = expected q1', (done) => {
+      const qs = '?q1=1&q2=2';
+      createItemsExpectation(qs, responseKey.qsOptionalQ1filled, done);
+    });
+
+  });
+
 });
 
-
-
-
-// var server = require('./dist/index.js');
-// var shell = require('gulp-shell');
-// var runSequence = require('run-sequence');
-
-// gulp.task('test', function (cb) {
-//   var serverInstance = server.runServer([], { port: 2121 });
-//   serverInstance.close();
-//   cb();
-// });
