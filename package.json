@@ -1,6 +1,6 @@
 {
   "name": "express-mock-server",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "description": "Mock server powered by Express.js",
   "main": "dist/index.js",
   "scripts": {
