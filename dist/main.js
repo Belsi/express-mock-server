@@ -379,6 +379,7 @@ var Server = function () {
 
         if (response === null) {
           console.log(_colors2.default.bgRed.white('ERR no reaponse but why?'));
+          console.log(_colors2.default.bgBlue.white('I know this URL but no match for parameters.'));
           console.log('method ' + method + '    path ' + path);
           console.log('QUERY'.yellow);
           console.log(req.query);
