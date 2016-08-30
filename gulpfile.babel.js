@@ -32,6 +32,9 @@ gulp.task('prepublish', shell.task(['npm run prepublish']));
 
 
 // npm run prepublish
+// gulp test
 // git comit and push
 // npm version patch {prida tag do gitu, takye push}
+// git push
+// npm publish
 
