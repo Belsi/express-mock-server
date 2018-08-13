@@ -1,4 +1,7 @@
 ### Project specific
 
+*.iml
 npm-debug.*
 node_modules/
+dist/
+.idea/
