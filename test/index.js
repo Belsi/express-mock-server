@@ -1,7 +1,7 @@
 import assert from 'assert';
 import http from 'http';
 import request from 'request';
-import { runServer } from '../lib/index.js';
+import { serverStart, serverStop } from '../lib/index.js';
 import sources from './sources';
 import urls from './urls';
 import responseKey, { responseKeyParam } from './responsekey';
@@ -38,14 +38,14 @@ function createCodeExpectation(url, code, done) {
 }
 
 describe('server', () => {
-  var serverInstance = null;
+
 
   before(() => {
-    serverInstance = runServer(sources, { port: PORT });
+    serverStart(sources, { port: PORT });
   });
 
   after(() => {
-    serverInstance.close();
+    serverStop();
   });
 
   describe('Basic working', () => {

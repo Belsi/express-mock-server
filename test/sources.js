@@ -16,6 +16,7 @@ const sources = [
     // codes
     createSource('GET', urls.base, 200),
     createSource('GET', urls.error, 500),
+    createSource('POST', urls.error, 500),
     createSource('GET', urls.notFound, 404),
     // query strings
     createSource('GET', urls.items, 200, responseKey.qsOptionalEmpty),
