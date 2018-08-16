@@ -35,7 +35,7 @@ response: function(urlParams, qsParams, bodyParams) {
 ## Basic use
 
 ```javascript
-import { runServer } from 'express-mock-server';
+import { serverStart } from 'express-mock-server';
 
 var sources = [
   require('./mock/source1.js'),
@@ -50,17 +50,6 @@ var opt_serverConfig = {
 };
 
 /**
- *  Return not strated Server instance
-     function can be called are 
-        start
-        close
- *  @param {Array} sources
- *  @param {?Object} opt_serverConfig
- *  @return {Server}
- */
-createServer(sources [, opt_serverConfig])
-
-/**
  *  Return strated Server instance
      function can be called are 
         start
@@ -69,6 +58,6 @@ createServer(sources [, opt_serverConfig])
  *  @param {?Object} opt_serverConfig
  *  @return {Server}
  */
-runServer(sources [, opt_serverConfig])
+serverStart(sources [, opt_serverConfig])
   
 ```

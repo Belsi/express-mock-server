@@ -1,17 +1,18 @@
-class Digger{
-
-  constructor(res, onResponse){
+class Digger {
+  constructor(res, onResponse) {
     this.data = '';
     this.onResponse = onResponse;
-    res.on('data', (chunk) => { this.data += chunk; });
+    res.on('data', chunk => {
+      this.data += chunk;
+    });
     res.on('end', this.makeOnResponse.bind(this));
   }
 
-  makeOnResponse(){
+  makeOnResponse() {
     this.onResponse(this.getData());
   }
 
-  getData(){
+  getData() {
     return JSON.parse(this.data);
   }
 }
