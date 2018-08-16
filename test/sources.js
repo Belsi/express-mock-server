@@ -125,10 +125,10 @@ export function createSource({
     request: {
       method,
       path,
-      queryStringParameters,
-      delay
+      queryStringParameters
     },
     response: {
+      delay,
       statusCode,
       body: JSON.stringify(body)
     }
