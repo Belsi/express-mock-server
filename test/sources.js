@@ -14,39 +14,54 @@ const dynamicResponseQs = [{ name: 'q1', values: ['.*'] }];
 const sources = [
   [
     // codes
-    createSource('GET', urls.base, 200),
-    createSource('GET', urls.error, 500),
-    createSource('POST', urls.error, 500),
-    createSource('GET', urls.notFound, 404),
+    createSource({ method: 'GET', path: urls.base, statusCode: 200 }),
+    createSource({ method: 'GET', path: urls.error, statusCode: 500 }),
+    createSource({ method: 'POST', path: urls.error, statusCode: 500 }),
+    createSource({ method: 'GET', path: urls.notFound, statusCode: 404 }),
     // query strings
-    createSource('GET', urls.items, 200, responseKey.qsOptionalEmpty),
-    createSource(
-      'GET',
-      urls.items,
-      200,
-      responseKey.qsOptionalQ1Q2Q3Filed,
-      q1q2q3FilledQs
-    ),
-    createSource(
-      'GET',
-      urls.items,
-      200,
-      responseKey.qsOptionalQ1filled,
-      q1filledQs
-    ),
+    createSource({
+      method: 'GET',
+      path: urls.items,
+      statusCode: 200,
+      key: responseKey.qsOptionalEmpty
+    }),
+    createSource({
+      method: 'GET',
+      path: urls.items,
+      statusCode: 200,
+      key: responseKey.qsOptionalQ1Q2Q3Filed,
+      queryStringParameters: q1q2q3FilledQs
+    }),
+    createSource({
+      method: 'GET',
+      path: urls.items,
+      statusCode: 200,
+      key: responseKey.qsOptionalQ1filled,
+      queryStringParameters: q1filledQs
+    }),
     // item
-    createSource('GET', urls.item, 200, responseKey.urlParamBase),
-    // createSource('GET', urls.itemHardId, 200, responseKey.urlParamHardId),
+    createSource({
+      method: 'GET',
+      path: urls.item,
+      statusCode: 200,
+      key: responseKey.urlParamBase
+    }),
+    createSource({
+      method: 'GET',
+      path: urls.itemHardId,
+      statusCode: 200,
+      key: responseKey.urlParamHardId
+    }),
 
     // dynamic response
 
-    createDynamicSource(
-      'POST',
-      urls.dynamicResponse,
-      200,
-      responseKey.dynamicResponse,
-      dynamicResponseQs
-    )
+    createDynamicSource({
+      method: 'POST',
+      path: urls.dynamicResponse,
+      statusCode: 200,
+      key: responseKey.dynamicResponse,
+      queryStringParameters: dynamicResponseQs
+    })
   ]
 ];
 
@@ -55,21 +70,21 @@ export default sources;
 /**
  *
  */
-function createDynamicSource(
+function createDynamicSource({
   method,
   path,
   statusCode,
   key,
   queryStringParameters = null
-) {
+}) {
   let body = {};
   body[responseKeyParam] = key;
 
   return {
     request: {
-      method: method,
-      path: path,
-      queryStringParameters: queryStringParameters,
+      method,
+      path,
+      queryStringParameters,
       body: {
         type: 'JSON',
         value: JSON.stringify({
@@ -85,7 +100,7 @@ function createDynamicSource(
         urlParams
       };
       return {
-        statusCode: statusCode,
+        statusCode,
         body: JSON.stringify(body)
       };
     }
@@ -95,24 +110,26 @@ function createDynamicSource(
 /**
  *
  */
-function createSource(
+export function createSource({
   method,
   path,
   statusCode,
+  delay,
   key,
   queryStringParameters = null
-) {
+}) {
   let body = {};
   body[responseKeyParam] = key;
 
   return {
     request: {
-      method: method,
-      path: path,
-      queryStringParameters: queryStringParameters
+      method,
+      path,
+      queryStringParameters,
+      delay
     },
     response: {
-      statusCode: statusCode,
+      statusCode,
       body: JSON.stringify(body)
     }
   };
