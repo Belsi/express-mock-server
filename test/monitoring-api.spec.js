@@ -63,7 +63,7 @@ describe('recording API', () => {
       });
   });
 
-  it('should monitor API calls', done => {
+  it('should monitor GET API call', done => {
     chai
       .request(server)
       .post('/api/v1/recording/start')
@@ -90,6 +90,52 @@ describe('recording API', () => {
                 res.body.should.be.an('array').and.to.have.lengthOf(1);
                 res.body[0].method.should.equal('GET');
                 res.body[0].path.should.equal('/items');
+                done();
+              });
+          });
+      });
+  });
+
+  it('should monitor POST API call', done => {
+    chai
+      .request(server)
+      .post('/api/v1/recording/start')
+      .end((err, res) => {
+        should.not.exist(err);
+        res.status.should.equal(200);
+        res.body.id.should.be.a('string');
+
+        const monitoringId = res.body.id;
+
+        chai
+          .request(server)
+          .post(`/dynamic/response/555?queryParam=queryValue`)
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.equal(200);
+
+            chai
+              .request(server)
+              .post(`/api/v1/recording/${monitoringId}/stop`)
+              .end((err, res) => {
+                should.not.exist(err);
+                res.status.should.equal(200);
+                res.body.should.be.an('array').and.to.have.lengthOf(1);
+                res.body[0].method.should.equal('POST');
+                res.body[0].path.should.equal('/dynamic/response/555');
+                res.body[0].query.should.deep.equal({
+                  queryParam: 'queryValue'
+                });
+
+                const responseBody = JSON.parse(res.body[0].responseBody);
+                responseBody.should.deep.equal({
+                  responseKey: 'dynamicResponse',
+                  requestParams: {
+                    qsParams: { queryParam: 'queryValue' },
+                    bodyParams: {},
+                    urlParams: { urlParam: '555' }
+                  }
+                });
                 done();
               });
           });
