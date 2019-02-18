@@ -127,8 +127,7 @@ describe('recording API', () => {
                   queryParam: 'queryValue'
                 });
 
-                const responseBody = JSON.parse(res.body[0].responseBody);
-                responseBody.should.deep.equal({
+                res.body[0].responseBody.should.deep.equal({
                   responseKey: 'dynamicResponse',
                   requestParams: {
                     qsParams: { queryParam: 'queryValue' },
