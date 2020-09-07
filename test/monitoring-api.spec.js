@@ -96,7 +96,7 @@ describe('recording API', () => {
       });
   });
 
-  it('should monitor POST API call', done => {
+  it('should monitor POST API call with empty body', done => {
     chai
       .request(server)
       .post('/api/v1/recording/start')
@@ -132,6 +132,99 @@ describe('recording API', () => {
                   requestParams: {
                     qsParams: { queryParam: 'queryValue' },
                     bodyParams: {},
+                    urlParams: { urlParam: '555' }
+                  }
+                });
+                done();
+              });
+          });
+      });
+  });
+
+  it('should monitor POST API call with application/json', done => {
+    chai
+      .request(server)
+      .post('/api/v1/recording/start')
+      .end((err, res) => {
+        should.not.exist(err);
+        res.status.should.equal(200);
+        res.body.id.should.be.a('string');
+
+        const monitoringId = res.body.id;
+
+        chai
+          .request(server)
+          .post(`/dynamic/response/555?queryParam=queryValue`)
+          .send({ test: 'pokus' })
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.equal(200);
+
+            chai
+              .request(server)
+              .post(`/api/v1/recording/${monitoringId}/stop`)
+              .end((err, res) => {
+                should.not.exist(err);
+                res.status.should.equal(200);
+                res.body.should.be.an('array').and.to.have.lengthOf(1);
+                res.body[0].method.should.equal('POST');
+                res.body[0].path.should.equal('/dynamic/response/555');
+                res.body[0].query.should.deep.equal({
+                  queryParam: 'queryValue'
+                });
+
+                res.body[0].responseBody.should.deep.equal({
+                  responseKey: 'dynamicResponse',
+                  requestParams: {
+                    qsParams: { queryParam: 'queryValue' },
+                    bodyParams: { test: 'pokus' },
+                    urlParams: { urlParam: '555' }
+                  }
+                });
+                done();
+              });
+          });
+      });
+  });
+
+  it('should monitor POST API call with text/plain', done => {
+    chai
+      .request(server)
+      .post('/api/v1/recording/start')
+      .end((err, res) => {
+        should.not.exist(err);
+        res.status.should.equal(200);
+        res.body.id.should.be.a('string');
+
+        const monitoringId = res.body.id;
+
+        chai
+          .request(server)
+          .post(`/dynamic/response/555?queryParam=queryValue`)
+          .set('content-type', 'text/plain')
+          .send('test text body')
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.equal(200);
+
+            chai
+              .request(server)
+              .post(`/api/v1/recording/${monitoringId}/stop`)
+              .end((err, res) => {
+                should.not.exist(err);
+                res.status.should.equal(200);
+                res.body.should.be.an('array').and.to.have.lengthOf(1);
+                res.body[0].method.should.equal('POST');
+                res.body[0].path.should.equal('/dynamic/response/555');
+                res.body[0].query.should.deep.equal({
+                  queryParam: 'queryValue'
+                });
+
+                res.body[0].responseBody.should.deep.equal({
+                  responseKey: 'dynamicResponse',
+                  requestParams: {
+                    qsParams: { queryParam: 'queryValue' },
+                    bodyParams: 'test text body',
                     urlParams: { urlParam: '555' }
                   }
                 });
