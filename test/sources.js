@@ -52,6 +52,13 @@ const sources = [
       statusCode: 200,
       key: responseKey.urlParamHardId
     }),
+    createSource({
+      method: 'GET',
+      path: urls.items,
+      statusCode: 200,
+      key: responseKey.qsMultiQ1,
+      queryStringParameters: [{ name: 'q1', values: ['1', '2', '3'] }]
+    }),
 
     // dynamic response
 
@@ -61,7 +68,7 @@ const sources = [
       statusCode: 200,
       key: responseKey.dynamicResponse,
       queryStringParameters: dynamicResponseQs
-    })
+    }),
   ]
 ];
 

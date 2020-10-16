@@ -86,6 +86,31 @@ describe('server', () => {
       createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
     });
 
+    it('multi q1 filled = matched for the same values', done => {
+      const qs = '?q1=1&q1=2&q1=3';
+      createItemsExpectation(qs, responseKey.qsMultiQ1, done);
+    });
+
+    it('multi q1 filled = matched also for different order of values', done => {
+      const qs = '?q1=1&q1=3&q1=2';
+      createItemsExpectation(qs, responseKey.qsMultiQ1, done);
+    });
+
+    it('multi q1 filled = no matched because more values', done => {
+      const qs = '?q1=1&q1=2&q1=3&q1=4';
+      createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
+    });
+
+    it('multi q1 filled = no matched because one value is different', done => {
+      const qs = '?q1=1&q1=2&q1=4';
+      createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
+    });
+
+    it('multi q1 filled = no matched because less values', done => {
+      const qs = '?q1=1&q1=2';
+      createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
+    });
+
     it('q1, q2, q3 filled  = expected q1, q2, q3', done => {
       const qs = '?q1=1&q2=2&q3=3';
       createItemsExpectation(qs, responseKey.qsOptionalQ1Q2Q3Filed, done);
