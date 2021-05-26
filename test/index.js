@@ -6,11 +6,14 @@ import sources from './sources';
 import urls from './urls';
 import responseKey, { responseKeyParam } from './responsekey';
 import Digger from './Digger';
+import { client as WebSocketClient } from 'websocket';
 
 const PORT = 1337;
 const SERVER_NAME = '127.0.0.1';
 const SERVER_URL_WITHOUT_PORT = 'http://' + SERVER_NAME;
 const SERVER_URL = SERVER_URL_WITHOUT_PORT + ':' + PORT;
+
+const WS_SERVER_URL = 'ws://' + SERVER_NAME + ':' + PORT;
 
 function createItemsExpectation(qs, key, done) {
   http.get(SERVER_URL + urls.items + qs, res => {
@@ -38,10 +41,8 @@ function createCodeExpectation(url, code, done) {
 }
 
 describe('server', () => {
-
-
   before(() => {
-    serverStart(sources, { port: PORT });
+    serverStart(sources, { port: PORT, webSocketEnabled: true });
   });
 
   after(() => {
@@ -135,6 +136,17 @@ describe('server', () => {
   describe('dynamic response', () => {
     it('query should be in response', done => {
       createDynamicResponseExpectation(responseKey.dynamicResponse, done);
+    });
+  });
+
+  describe('websocket', () => {
+    it('try to connect', done => {
+      const client = new WebSocketClient();
+      client.on('connect', function(connection) {
+        assert.equal('open', connection.state);
+        done();
+      });
+      client.connect(WS_SERVER_URL, 'echo-protocol');
     });
   });
 
