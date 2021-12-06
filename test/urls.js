@@ -3,6 +3,7 @@ const urls = {
   error: '/error',
   notFound: '/not-found',
   items: '/items',
+  itemsLogo: '/items/logo',
   item: '/item/:id',
   itemHardId: '/item/hardId',
   dynamicResponseBase: '/dynamic/response/',

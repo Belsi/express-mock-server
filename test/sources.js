@@ -1,10 +1,11 @@
 import urls from './urls';
 import responseKey, { responseKeyParam } from './responsekey';
+import path from 'path';
 
 const q1q2q3FilledQs = [
   { name: 'q1', values: ['.*'] },
   { name: 'q2', values: ['.*'] },
-  { name: 'q3', values: ['.*'] }
+  { name: 'q3', values: ['.*'] },
 ];
 
 const q1filledQs = [{ name: 'q1', values: ['1'] }];
@@ -23,41 +24,41 @@ const sources = [
       method: 'GET',
       path: urls.items,
       statusCode: 200,
-      key: responseKey.qsOptionalEmpty
+      key: responseKey.qsOptionalEmpty,
     }),
     createSource({
       method: 'GET',
       path: urls.items,
       statusCode: 200,
       key: responseKey.qsOptionalQ1Q2Q3Filed,
-      queryStringParameters: q1q2q3FilledQs
+      queryStringParameters: q1q2q3FilledQs,
     }),
     createSource({
       method: 'GET',
       path: urls.items,
       statusCode: 200,
       key: responseKey.qsOptionalQ1filled,
-      queryStringParameters: q1filledQs
+      queryStringParameters: q1filledQs,
     }),
     // item
     createSource({
       method: 'GET',
       path: urls.item,
       statusCode: 200,
-      key: responseKey.urlParamBase
+      key: responseKey.urlParamBase,
     }),
     createSource({
       method: 'GET',
       path: urls.itemHardId,
       statusCode: 200,
-      key: responseKey.urlParamHardId
+      key: responseKey.urlParamHardId,
     }),
     createSource({
       method: 'GET',
       path: urls.items,
       statusCode: 200,
       key: responseKey.qsMultiQ1,
-      queryStringParameters: [{ name: 'q1', values: ['1', '2', '3'] }]
+      queryStringParameters: [{ name: 'q1', values: ['1', '2', '3'] }],
     }),
 
     // dynamic response
@@ -67,9 +68,24 @@ const sources = [
       path: urls.dynamicResponse,
       statusCode: 200,
       key: responseKey.dynamicResponse,
-      queryStringParameters: dynamicResponseQs
+      queryStringParameters: dynamicResponseQs,
     }),
-  ]
+
+    // response with file
+    {
+      request: {
+        method: 'GET',
+        path: urls.itemsLogo,
+      },
+      response: {
+        statusCode: 200,
+        file: {
+          type: 'image/jpg',
+          path: path.join(__dirname, 'image.jpg'),
+        },
+      },
+    },
+  ],
 ];
 
 export default sources;
@@ -82,7 +98,7 @@ function createDynamicSource({
   path,
   statusCode,
   key,
-  queryStringParameters = null
+  queryStringParameters = null,
 }) {
   let body = {};
   body[responseKeyParam] = key;
@@ -95,22 +111,22 @@ function createDynamicSource({
       body: {
         type: 'JSON',
         value: JSON.stringify({
-          bodyParam1: 'bodyValue1'
+          bodyParam1: 'bodyValue1',
         }),
-        matchType: 'ONLY_MATCHING_FIELDS'
-      }
+        matchType: 'ONLY_MATCHING_FIELDS',
+      },
     },
-    response: function(urlParams, qsParams, bodyParams) {
+    response: function (urlParams, qsParams, bodyParams) {
       body['requestParams'] = {
         qsParams,
         bodyParams,
-        urlParams
+        urlParams,
       };
       return {
         statusCode,
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       };
-    }
+    },
   };
 }
 
@@ -123,7 +139,7 @@ export function createSource({
   statusCode,
   delay,
   key,
-  queryStringParameters = null
+  queryStringParameters = null,
 }) {
   let body = {};
   body[responseKeyParam] = key;
@@ -132,12 +148,12 @@ export function createSource({
     request: {
       method,
       path,
-      queryStringParameters
+      queryStringParameters,
     },
     response: {
       delay,
       statusCode,
-      body: JSON.stringify(body)
-    }
+      body: JSON.stringify(body),
+    },
   };
 }

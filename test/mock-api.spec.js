@@ -29,4 +29,18 @@ describe('API mocks', () => {
         done();
       });
   });
+
+  it('should call mocked API with file response', done => {
+    chai
+      .request(server)
+      .get('/items/logo')
+      .end((err, res) => {
+        console.log(res.body);
+        should.not.exist(err);
+        res.status.should.equal(200);
+        res.type.should.equal('image/jpg');
+        chai.expect(res.body).to.have.lengthOf(2317786);
+        done();
+      });
+  });
 });
