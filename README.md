@@ -61,3 +61,8 @@ var opt_serverConfig = {
 serverStart(sources [, opt_serverConfig])
   
 ```
+
+## Advanced configuration
+The following environment variables can be set
+- `LOGGING`: If set to 'ON', enables request logging in the console.
+- `PORT`: Optionally sets the default port to use when it is not explicitly passed to `serverStart(...)`.
