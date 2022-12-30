@@ -45,7 +45,7 @@
     "@babel/register": "7.16.0",
     "chai": "4.3.4",
     "chai-http": "4.3.0",
-    "mocha": "6.2.2",
+    "mocha": "10.2.0",
     "nodemon": "2.0.15",
     "prettier": "2.5.1",
     "request": "2.88.2",
