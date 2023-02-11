@@ -46,7 +46,7 @@
     "chai": "4.3.4",
     "chai-http": "4.3.0",
     "mocha": "6.2.2",
-    "nodemon": "2.0.15",
+    "nodemon": "2.0.20",
     "prettier": "2.5.1",
     "request": "2.88.2",
     "run-sequence": "2.2.1",
