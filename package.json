@@ -21,7 +21,7 @@
     "server",
     "express"
   ],
-  "author": "Frantisek Belsan <frantisek.belsan@gmail.com> (https://github.com/Belsi)",
+  "222author": "Frantisek Belsan <frantisek.belsan@gmail.com> (https://github.com/Belsi)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Belsi/express-mock-server/issues"
