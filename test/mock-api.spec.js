@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 
 const should = chai.should();
 
-describe('API mocks', () => {
+describe.only('API mocks', () => {
   let server;
 
   before(() => {
