@@ -1,7 +1,7 @@
 import assert from 'assert';
 import http from 'http';
 import request from 'request';
-import { serverStart, serverStop } from '../lib/index.js';
+import { serverStart, serverStop } from '../lib';
 import sources from './sources';
 import urls from './urls';
 import responseKey, { responseKeyParam } from './responsekey';
@@ -16,8 +16,8 @@ const SERVER_URL = SERVER_URL_WITHOUT_PORT + ':' + PORT;
 const WS_SERVER_URL = 'ws://' + SERVER_NAME + ':' + PORT;
 
 function createItemsExpectation(qs, key, done) {
-  http.get(SERVER_URL + urls.items + qs, res => {
-    new Digger(res, data => {
+  http.get(SERVER_URL + urls.items + qs, (res) => {
+    new Digger(res, (data) => {
       assert.equal(key, data[responseKeyParam]);
       done();
     });
@@ -25,8 +25,8 @@ function createItemsExpectation(qs, key, done) {
 }
 
 function createItemExpectation(id, key, done) {
-  http.get(SERVER_URL + urls.item + id, res => {
-    new Digger(res, data => {
+  http.get(SERVER_URL + urls.item + id, (res) => {
+    new Digger(res, (data) => {
       assert.equal(key, data[responseKeyParam]);
       done();
     });
@@ -34,7 +34,7 @@ function createItemExpectation(id, key, done) {
 }
 
 function createCodeExpectation(url, code, done) {
-  http.get(SERVER_URL + url, res => {
+  http.get(SERVER_URL + url, (res) => {
     assert.equal(code, res.statusCode);
     done();
   });
@@ -50,15 +50,15 @@ describe('server', () => {
   });
 
   describe('Basic working', () => {
-    it('should return 200', done => {
+    it('should return 200', (done) => {
       createCodeExpectation('', 200, done);
     });
 
-    it('should return 500', done => {
+    it('should return 500', (done) => {
       createCodeExpectation(urls.error, 500, done);
     });
 
-    it('should return 404', done => {
+    it('should return 404', (done) => {
       createCodeExpectation(urls.notFound, 404, done);
     });
 
@@ -73,58 +73,58 @@ describe('server', () => {
   });
 
   describe('Query strings', () => {
-    it('no query = expected empty', done => {
+    it('no query = expected empty', (done) => {
       createItemsExpectation('', responseKey.qsOptionalEmpty, done);
     });
 
-    it('only q1 filled = expected q1', done => {
+    it('only q1 filled = expected q1', (done) => {
       const qs = '?q1=1';
       createItemsExpectation(qs, responseKey.qsOptionalQ1filled, done);
     });
 
-    it('only q1 wrong filled = expected empty', done => {
+    it('only q1 wrong filled = expected empty', (done) => {
       const qs = '?q1=2';
       createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
     });
 
-    it('multi q1 filled = matched for the same values', done => {
+    it('multi q1 filled = matched for the same values', (done) => {
       const qs = '?q1=1&q1=2&q1=3';
       createItemsExpectation(qs, responseKey.qsMultiQ1, done);
     });
 
-    it('multi q1 filled = matched also for different order of values', done => {
+    it('multi q1 filled = matched also for different order of values', (done) => {
       const qs = '?q1=1&q1=3&q1=2';
       createItemsExpectation(qs, responseKey.qsMultiQ1, done);
     });
 
-    it('multi q1 filled = no matched because more values', done => {
+    it('multi q1 filled = no matched because more values', (done) => {
       const qs = '?q1=1&q1=2&q1=3&q1=4';
       createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
     });
 
-    it('multi q1 filled = no matched because one value is different', done => {
+    it('multi q1 filled = no matched because one value is different', (done) => {
       const qs = '?q1=1&q1=2&q1=4';
       createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
     });
 
-    it('multi q1 filled = no matched because less values', done => {
+    it('multi q1 filled = no matched because less values', (done) => {
       const qs = '?q1=1&q1=2';
       createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
     });
 
-    it('q1, q2, q3 filled  = expected q1, q2, q3', done => {
+    it('q1, q2, q3 filled  = expected q1, q2, q3', (done) => {
       const qs = '?q1=1&q2=2&q3=3';
       createItemsExpectation(qs, responseKey.qsOptionalQ1Q2Q3Filed, done);
     });
 
-    it('q1, q2 filled  = expected q1', done => {
+    it('q1, q2 filled  = expected q1', (done) => {
       const qs = '?q1=1&q2=2';
       createItemsExpectation(qs, responseKey.qsOptionalQ1filled, done);
     });
   });
 
   describe('url params', () => {
-    it('item id lolek1 = expected urlParamBase', done => {
+    it('item id lolek1 = expected urlParamBase', (done) => {
       createItemExpectation('lolek1', responseKey.urlParamBase, done);
     });
 
@@ -134,15 +134,15 @@ describe('server', () => {
   });
 
   describe('dynamic response', () => {
-    it('query should be in response', done => {
+    it('query should be in response', (done) => {
       createDynamicResponseExpectation(responseKey.dynamicResponse, done);
     });
   });
 
   describe('websocket', () => {
-    it('try to connect', done => {
+    it('try to connect', (done) => {
       const client = new WebSocketClient();
-      client.on('connect', function(connection) {
+      client.on('connect', function (connection) {
         assert.equal('open', connection.state);
         done();
       });
@@ -166,7 +166,7 @@ describe('server', () => {
       method: 'post',
       body: postData, // Javascript object
       json: true, // Use,If you are sending JSON data
-      url: SERVER_URL + urls.dynamicResponseBase + urlParamValue + qs
+      url: SERVER_URL + urls.dynamicResponseBase + urlParamValue + qs,
     };
 
     request(options, (err, res, body) => {

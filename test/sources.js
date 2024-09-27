@@ -85,6 +85,19 @@ const sources = [
         },
       },
     },
+
+    {
+      request: {
+        method: 'POST',
+        path: '/docs/upload',
+        useFullRequestInResponse: true,
+      },
+      response: () => {
+        return {
+          statusCode: 200,
+        };
+      },
+    },
   ],
 ];
 
@@ -139,6 +152,7 @@ export function createSource({
   statusCode,
   delay,
   key,
+  formDataKey = null,
   queryStringParameters = null,
 }) {
   let body = {};
@@ -148,6 +162,7 @@ export function createSource({
     request: {
       method,
       path,
+      formDataKey,
       queryStringParameters,
     },
     response: {
