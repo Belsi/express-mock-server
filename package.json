@@ -3,6 +3,9 @@
   "version": "3.5.0",
   "description": "Mock server powered by Express.js",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prepublishOnly": "npm run build",
     "prepare": "npm run build",

@@ -1,4 +1,4 @@
-import { SourcesParser } from './sources-parser';
+import { SourcesParser } from '../lib/core/sources-parser';
 import assert from 'assert';
 
 describe('source-parser', () => {
