@@ -26,7 +26,14 @@ describe('recording API', () => {
         should.not.exist(err);
         res.status.should.equal(200);
         res.body.id.should.be.a('string');
-        done();
+
+        chai
+          .request(server)
+          .post(`/api/v1/recording/${res.body.id}/stop`)
+          .end((err) => {
+            should.not.exist(err);
+            done();
+          });
       });
   });
 
