@@ -83,8 +83,13 @@ describe('server', () => {
     });
 
     it('only q1 wrong filled = expected empty', (done) => {
-      const qs = '?q1=2';
+      const qs = '?q1=99';
       createItemsExpectation(qs, responseKey.qsOptionalEmpty, done);
+    });
+
+    it('single q1 value matching one of an enum list = matched as enum', (done) => {
+      const qs = '?q1=2';
+      createItemsExpectation(qs, responseKey.qsMultiQ1, done);
     });
 
     it('multi q1 filled = matched for the same values', (done) => {
