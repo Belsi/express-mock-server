@@ -24,6 +24,15 @@ function createItemsExpectation(qs, key, done) {
   });
 }
 
+function createEnumOverviewExpectation(qs, key, done) {
+  http.get(SERVER_URL + urls.enumOverview + qs, (res) => {
+    new Digger(res, (data) => {
+      assert.equal(key, data[responseKeyParam]);
+      done();
+    });
+  });
+}
+
 function createItemExpectation(id, key, done) {
   http.get(SERVER_URL + urls.item + id, (res) => {
     new Digger(res, (data) => {
@@ -90,6 +99,16 @@ describe('server', () => {
     it('single q1 value matching one of an enum list = matched as enum', (done) => {
       const qs = '?q1=2';
       createItemsExpectation(qs, responseKey.qsMultiQ1, done);
+    });
+
+    it('enum param combined with wildcard params = matched as enum', (done) => {
+      const qs = '?clientId=123&type=SDPO&bankRefId=abc';
+      createEnumOverviewExpectation(qs, responseKey.qsEnumMultiParams, done);
+    });
+
+    it('enum param combined with wildcard params = no match for value outside enum', (done) => {
+      const qs = '?clientId=123&type=UNKNOWN&bankRefId=abc';
+      createEnumOverviewExpectation(qs, responseKey.qsEnumMultiParamsEmpty, done);
     });
 
     it('multi q1 filled = matched for the same values', (done) => {

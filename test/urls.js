@@ -8,7 +8,8 @@ const urls = {
   itemHardId: '/item/hardId',
   dynamicResponseBase: '/dynamic/response/',
   dynamicResponseKey: 'urlParam',
-  dynamicResponse: '/dynamic/response/:urlParam'
+  dynamicResponse: '/dynamic/response/:urlParam',
+  enumOverview: '/enum-overview'
 };
 
 export default urls;

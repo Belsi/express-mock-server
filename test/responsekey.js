@@ -5,6 +5,8 @@ const responseKey = {
   qsMultiQ1: 'qsMultiQ1',
   qsOptionalQ1Q2Q3Filed: 'qsOptionalQ1Q2Q3Filed',
   qsOptionalQ1filled: 'qsOptionalQ1filled',
+  qsEnumMultiParams: 'qsEnumMultiParams',
+  qsEnumMultiParamsEmpty: 'qsEnumMultiParamsEmpty',
 
   urlParamBase: 'urlParamBase',
   urlParamHardId: 'urlParamHardId',
