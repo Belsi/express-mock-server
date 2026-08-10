@@ -60,6 +60,23 @@ const sources = [
       key: responseKey.qsMultiQ1,
       queryStringParameters: [{ name: 'q1', values: ['1', '2', '3'] }],
     }),
+    createSource({
+      method: 'GET',
+      path: urls.enumOverview,
+      statusCode: 200,
+      key: responseKey.qsEnumMultiParamsEmpty,
+    }),
+    createSource({
+      method: 'GET',
+      path: urls.enumOverview,
+      statusCode: 200,
+      key: responseKey.qsEnumMultiParams,
+      queryStringParameters: [
+        { name: 'clientId', values: ['.*'] },
+        { name: 'type', values: ['SDPO', 'COLL', 'SIPO', 'SFPO'] },
+        { name: 'bankRefId', values: ['.*'] },
+      ],
+    }),
 
     // dynamic response
 
