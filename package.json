@@ -1,6 +1,6 @@
 {
   "name": "express-mock-server",
-  "version": "3.5.1",
+  "version": "4.0.0",
   "description": "Mock server powered by Express.js",
   "main": "dist/index.js",
   "files": [
@@ -47,6 +47,7 @@
     "@babel/register": "7.16.0",
     "chai": "4.3.4",
     "chai-http": "4.3.0",
+    "etag": "1.8.1",
     "mocha": "6.2.2",
     "nodemon": "2.0.15",
     "prettier": "2.5.1",

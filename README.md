@@ -46,7 +46,9 @@ var sources = [
 // this is default configuration
 var opt_serverConfig = {
   port: 8080,
-  controlApiUrl: '/api/v1'
+  controlApiUrl: '/api/v1',
+  webSocketEnabled: false,
+  httpCache: false
 };
 
 /**
@@ -61,6 +63,16 @@ var opt_serverConfig = {
 serverStart(sources [, opt_serverConfig])
   
 ```
+
+## HTTP caching
+Mocks return deterministic fixtures, so HTTP caching is disabled by default (since 4.0.0):
+- no `ETag` / `Last-Modified` headers are generated (neither for `body` nor for `file` responses),
+- every response carries `Cache-Control: no-store`,
+- conditional requests (`If-None-Match`, `If-Modified-Since`) are always answered `200` with the full body, never `304`.
+
+A source that sets its own `ETag` (or `Cache-Control`) via `headers` still gets standard behaviour - explicit config wins.
+
+To restore the Express defaults (weak ETags, `304 Not Modified`), pass `httpCache: true` in `opt_serverConfig`.
 
 ## Advanced configuration
 The following environment variables can be set
